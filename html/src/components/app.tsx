@@ -8,7 +8,9 @@ import type { ClientOptions, FlowControl } from './terminal/xterm';
 const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
 const path = window.location.pathname.replace(/[/]+$/, '');
 const wsUrl = [protocol, '//', window.location.host, path, '/ws', window.location.search].join('');
-const tokenUrl = [window.location.protocol, '//', window.location.host, path, '/token'].join('');
+const tokenUrl = [window.location.protocol, '//', window.location.host, path, '/token', window.location.search].join(
+    ''
+);
 const clientOptions = {
     rendererType: 'webgl',
     disableLeaveAlert: false,

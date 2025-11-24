@@ -11,6 +11,22 @@
     <% } %>
 </head>
 <body>
+<script type="text/javascript">
+    window.addEventListener('custom:ttydReady', (event) => {
+        window.parent.postMessage({ ttyd: 'ready' }, '*')
+
+    })
+    window.addEventListener("message", (e) => {
+        try {
+            if (e.data.command) {
+                window.term.paste(e.data.command)
+                document.querySelector("textarea.xterm-helper-textarea").dispatchEvent(new KeyboardEvent('keypress', { charCode: 13 }))
+            }
+        } catch (error) {
+            window.parent.postMessage({ ttyd: "error" }, "*")
+        }
+    })
+</script>
 <% for (const js in htmlWebpackPlugin.files.js) { %>
 <script inline type="text/javascript" src="<%= htmlWebpackPlugin.files.js[js] %>"></script>
 <% } %>
