@@ -105,14 +105,17 @@ int callback_http(struct lws *wsi, enum lws_callback_reasons reason, void *user,
     case LWS_CALLBACK_HTTP:
       access_log(wsi, (const char *)in);
       snprintf(pss->path, sizeof(pss->path), "%s", (const char *)in);
-      switch (check_auth(wsi, pss)) {
-        case AUTH_OK:
-          break;
-        case AUTH_FAIL:
-          return 0;
-        case AUTH_ERROR:
-        default:
-          return 1;
+      // only authenticate for / and /token
+      if (strcmp(pss->path, endpoints.index) == 0 || strcmp(pss->path, endpoints.token) == 0) {
+        switch (check_auth(wsi, pss)) {
+          case AUTH_OK:
+            break;
+          case AUTH_FAIL:
+            return 0;
+          case AUTH_ERROR:
+          default:
+            return 1;
+        }
       }
 
       p = buffer + LWS_PRE;
